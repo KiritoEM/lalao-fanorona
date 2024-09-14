@@ -46,13 +46,25 @@ export class BoardView {
             for (let col = 0; col < 4; col++) {
                 const x = col * this.cellSize + 40;
                 const y = row * this.cellSize + 40;
+                // Diagonale gauche
                 this.ctx.beginPath();
                 this.ctx.moveTo(x, y);
                 this.ctx.lineTo(x + this.cellSize, y + this.cellSize);
                 this.ctx.stroke();
+                // Diagonale droite
                 this.ctx.beginPath();
                 this.ctx.moveTo(x, y + this.cellSize);
                 this.ctx.lineTo(x + this.cellSize, y);
+                this.ctx.stroke();
+                // Ligne verticale au milieu de la cellule
+                this.ctx.beginPath();
+                this.ctx.moveTo(x + this.cellSize / 2, y);
+                this.ctx.lineTo(x + this.cellSize / 2, y + this.cellSize);
+                this.ctx.stroke();
+                // Ligne horizontale au milieu de la cellule
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, y + this.cellSize / 2);
+                this.ctx.lineTo(x + this.cellSize, y + this.cellSize / 2);
                 this.ctx.stroke();
             }
         }
@@ -65,6 +77,18 @@ export class BoardView {
                 const y = row * this.cellSize + 40;
                 this.ctx.beginPath();
                 this.ctx.arc(x, y, 15, 0, 2 * Math.PI);
+                this.ctx.fill();
+                //moitié de chaque case
+                const midX = x + this.cellSize / 2;
+                const midY = y + this.cellSize / 2;
+                this.ctx.beginPath();
+                this.ctx.arc(midX, y, 15, 0, 2 * Math.PI);
+                this.ctx.fill();
+                this.ctx.beginPath();
+                this.ctx.arc(x, midY, 15, 0, 2 * Math.PI);
+                this.ctx.fill();
+                this.ctx.beginPath();
+                this.ctx.arc(midX, midY, 15, 0, 2 * Math.PI);
                 this.ctx.fill();
             }
         }
