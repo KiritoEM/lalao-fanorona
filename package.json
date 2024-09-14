@@ -1,0 +1,17 @@
+{
+  "name": "lalao-fanorona",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/styles/styles.css -o ./dist/output.css --watch",
+    "TS": "npx tsc --outDir dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "tailwindcss": "^3.4.11",
+    "typescript": "^5.6.2"
+  }
+}

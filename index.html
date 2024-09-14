@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./dist/output.css" rel="stylesheet">
+  <title>Lalao Fanorona</title>
+  <style>
+    .blue-glow {
+      filter: drop-shadow(0 0 40px #a27035);
+    }
+  </style>
+</head>
+
+<body class="h-screen w-screen bg-stone-900 overflow-x-hidden">
+  <section
+    class="grid-bg absolute inset-0 h-full w-full bg-transparent bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] flex flex-col items-center justify-center gap-10">
+    <div class="container w-[342px] flex flex-col gap-7 items-center mt-20 mb-20">
+      <img src="/public/logo.svg" class="w-[160px] blue-glow">
+      <h2 class="text-white text-4xl calsans text-center">Bienvenue sur Lalao Fanorona</h2>
+      <div class="buttons flex flex-col gap-8 w-full">
+        <a href="/src/views/board.html"
+          class="text-white flex justify-center py-3 px-6 bg-primary rounded-xl hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+          Jouer contre l'IA
+        </a>
+        <button
+          class="text-white border-2 border-white py-3 px-6 rounded-xl hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+          Jouer contre un ami
+        </button>
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>
