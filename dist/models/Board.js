@@ -34,6 +34,37 @@ export class Board {
             }
         }
     }
+    checkWinner(turn) {
+        //ligne
+        for (let row = 0; row < 3; row++) {
+            if (this.board[row][0] === turn &&
+                this.board[row][1] === turn &&
+                this.board[row][2] === turn) {
+                return turn;
+            }
+        }
+        //colonne
+        for (let col = 0; col < 3; col++) {
+            if (this.board[0][col] === turn &&
+                this.board[1][col] === turn &&
+                this.board[3][col] === turn) {
+                return turn;
+            }
+        }
+        //diagonal 1
+        for (let row = 0; row < 3; row++) {
+            if (this.board[row][row] === turn) {
+                return turn;
+            }
+        }
+        //diagonal 2
+        if (this.board[2][0] === turn &&
+            this.board[1][1] === turn &&
+            this.board[0][2] === turn) {
+            return turn;
+        }
+        return null;
+    }
     suggestMoves(row, col) {
         let moves = [];
         //mouvements possibles

@@ -1,5 +1,6 @@
 import { BoardHelper } from "../helpers/BoardHelper.js";
 import { GameHelper } from "../helpers/GameHelper.js";
+import { PlayerType } from "../utils/types.js";
 
 export class Board {
   // Valeur initiale du plateau de jeu
@@ -48,6 +49,48 @@ export class Board {
         );
       }
     }
+  }
+
+  public checkWinner(turn: PlayerType): number | null {
+    //ligne
+    for (let row = 0; row < 3; row++) {
+      if (
+        this.board[row][0] === turn &&
+        this.board[row][1] === turn &&
+        this.board[row][2] === turn
+      ) {
+        return turn as number;
+      }
+    }
+
+    //colonne
+    for (let col = 0; col < 3; col++) {
+      if (
+        this.board[0][col] === turn &&
+        this.board[1][col] === turn &&
+        this.board[3][col] === turn
+      ) {
+        return turn as number;
+      }
+    }
+
+    //diagonal 1
+    for (let row = 0; row < 3; row++) {
+      if (this.board[row][row] === turn) {
+        return turn as number;
+      }
+    }
+
+    //diagonal 2
+    if (
+      this.board[2][0] === turn &&
+      this.board[1][1] === turn &&
+      this.board[0][2] === turn
+    ) {
+      return turn as number;
+    }
+
+    return null;
   }
 
   public suggestMoves(row: number, col: number): number[][] {

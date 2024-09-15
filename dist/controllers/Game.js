@@ -90,6 +90,7 @@ export class FanoronaGame {
         const rect = this.canvas.getBoundingClientRect();
         const clickX = event.clientX - rect.left;
         const clickY = event.clientY - rect.top;
+        //click du premier pion
         if (this.selectedRow === -1 && this.selectedCol === -1) {
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
@@ -106,6 +107,7 @@ export class FanoronaGame {
             }
         }
         else {
+            //click du deuxième pion
             let currentRow = -1;
             let currentCol = -1;
             for (let row = 0; row < 3; row++) {
