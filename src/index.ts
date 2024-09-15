@@ -1,14 +1,12 @@
-import { BoardView } from "./views/boardView.js";
+import { Game } from "./Controller/Game.js";
 
 const boardMatrix = [
-  [2, 1, 2, 1, 2, 1, 2, 1],
-  [1, 2, 1, 2, 1, 2, 1, 2],
-  [2, 1, 2, 1, 2, 1, 2, 1],
-  [1, 2, 1, 2, 1, 2, 1, 2],
-  [2, 1, 2, 1, 2, 1, 2, 1],
+  [1, 1, 1],
+  [1, 0, 2],
+  [2, 2, 2],
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  const boardView = new BoardView(boardMatrix);
+  const boardView = new Game(boardMatrix);
   boardView.renderBoard();
 });
