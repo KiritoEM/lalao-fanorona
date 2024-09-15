@@ -33,9 +33,6 @@ export class Board {
                 alert(`Erreur de tour: tour du joueur ${this.gameHelper.getCurrentPlayer()}`);
             }
         }
-        else {
-            alert("Déplacement invalide");
-        }
     }
     suggestMoves(row, col) {
         let moves = [];

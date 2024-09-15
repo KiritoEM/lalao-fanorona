@@ -1,5 +1,5 @@
-import { BoardHelper } from "../helpers/BoardHelper.js";
 import { GREEN_COLOR, RED_COLOR } from "../helpers/constants.js";
+import { GameHelper } from "../helpers/GameHelper.js";
 import { Board } from "../models/Board.js";
 export class FanoronaGame {
     constructor() {
@@ -7,7 +7,7 @@ export class FanoronaGame {
         this.selectedCol = -1;
         //instanciation de la classe Board
         this.board = new Board();
-        this.boardHelper = new BoardHelper();
+        this.gameHelper = new GameHelper();
         this.canvas = document.getElementById("board");
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
@@ -88,27 +88,23 @@ export class FanoronaGame {
     }
     handleGridClick(event) {
         const rect = this.canvas.getBoundingClientRect();
-        // Fixer le click à l'intérieur du canvas
         const clickX = event.clientX - rect.left;
         const clickY = event.clientY - rect.top;
         if (this.selectedRow === -1 && this.selectedCol === -1) {
-            // Premier clic : sélectionner un pion
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
                     if (this.boardMatrix[row][col] !== 0) {
-                        // Position de chaque pion
                         if (this.validatePawn(col, row, clickX, clickY)) {
                             this.selectedRow = row;
                             this.selectedCol = col;
                             this.drawSuggestions(this.board.suggestMoves(this.selectedRow, this.selectedCol));
-                            break;
+                            return;
                         }
                     }
                 }
             }
         }
         else {
-            // Deuxième clic : déplacer le pion
             let currentRow = -1;
             let currentCol = -1;
             for (let row = 0; row < 3; row++) {

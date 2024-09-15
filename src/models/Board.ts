@@ -47,8 +47,6 @@ export class Board {
           `Erreur de tour: tour du joueur ${this.gameHelper.getCurrentPlayer()}`
         );
       }
-    } else {
-      alert("Déplacement invalide");
     }
   }
 
