@@ -218,6 +218,7 @@ export class FanoronaGame {
       // Ne pas dessiner le pion d'origine pendant l'animation
       this.drawPawns(this.selectedRow, this.selectedCol);
 
+      // Dessiner le pion en mouvement
       this.ctx.fillStyle = color;
       this.ctx.beginPath();
       this.ctx.arc(currentX, currentY, 15, 0, 2 * Math.PI);
