@@ -36,12 +36,19 @@ export class Board {
       this.boardHelper.canMove(row, col, newCol, newRow) &&
       this.board[newRow][newCol] === 0
     ) {
-      this.board[newRow][newCol] = this.board[row][col];
-      this.board[row][col] = 0;
-      this.gameHelper.changeTurn();
-      console.log("Tour: " + this.gameHelper.getCurrentPlayer());
+      if (
+        this.board[row][col] === (this.gameHelper.getCurrentPlayer() as number)
+      ) {
+        this.board[newRow][newCol] = this.board[row][col];
+        this.board[row][col] = 0;
+        this.gameHelper.changeTurn();
+      } else {
+        alert(
+          `Erreur de tour: tour du joueur ${this.gameHelper.getCurrentPlayer()}`
+        );
+      }
     } else {
-      alert("Impossible d'effectuer le déplacement");
+      alert("Déplacement invalide");
     }
   }
 }
