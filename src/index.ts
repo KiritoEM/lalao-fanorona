@@ -1,10 +1,6 @@
-import { Game } from "./controllers/Game.js";
-import { Board } from "./models/Board.js";
-
-//instanciation de la classe Board
-const board = new Board();
+import { FanoronaGame } from "./controllers/Game.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const boardView = new Game(board.getBoard());
-  boardView.renderBoard();
+  const fanorona = new FanoronaGame();
+  fanorona.start();
 });
