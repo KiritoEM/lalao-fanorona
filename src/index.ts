@@ -1,12 +1,10 @@
-import { Game } from "./Controller/Game.js";
+import { Game } from "./controllers/Game.js";
+import { Board } from "./models/Board.js";
 
-const boardMatrix = [
-  [1, 1, 1],
-  [1, 0, 2],
-  [2, 2, 2],
-];
+//instanciation de la classe Board
+const board = new Board();
 
 document.addEventListener("DOMContentLoaded", () => {
-  const boardView = new Game(boardMatrix);
+  const boardView = new Game(board.getBoard());
   boardView.renderBoard();
 });

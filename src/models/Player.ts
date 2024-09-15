@@ -1,7 +1,4 @@
-export enum PlayerType {
-  player1 = 1,
-  player2 = 2,
-}
+import { PlayerType } from "../utils/types.js";
 
 export class Player {
   private name: string;
@@ -10,6 +7,10 @@ export class Player {
   constructor(name: string, type: PlayerType) {
     this.name = name;
     this.type = type;
+  }
+
+  public getPlayerName(): string {
+    return this.name;
   }
 
   public getPlayerType(): PlayerType {

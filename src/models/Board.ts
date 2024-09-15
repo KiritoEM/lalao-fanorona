@@ -1,14 +1,16 @@
 import { BoardHelper } from "../helpers/BoardHelper.js";
+import { GameHelper } from "../helpers/GameHelper.js";
 
 export class Board {
-  //valeur initiale du plateau de jeu
+  // Valeur initiale du plateau de jeu
   private board: number[][] = [
     [1, 1, 1],
-    [1, 0, 2],
+    [0, 0, 0],
     [2, 2, 2],
   ];
 
   boardHelper = new BoardHelper();
+  gameHelper = new GameHelper();
 
   constructor() {}
 
@@ -19,7 +21,7 @@ export class Board {
   public resetBoard() {
     this.board = [
       [1, 1, 1],
-      [1, 0, 2],
+      [0, 0, 0],
       [2, 2, 2],
     ];
   }
@@ -27,11 +29,19 @@ export class Board {
   public movePawn(
     row: number,
     col: number,
-    newCol: number,
-    newRow: number
+    newRow: number,
+    newCol: number
   ): void {
-    this.board[newRow][newCol] = this.board[row][col];
-    board[row][col] = 0;
-    this.boardHelper.movePawn(row, col, newCol, newRow, this.board);
+    if (
+      this.boardHelper.canMove(row, col, newCol, newRow) &&
+      this.board[newRow][newCol] === 0
+    ) {
+      this.board[newRow][newCol] = this.board[row][col];
+      this.board[row][col] = 0;
+      this.gameHelper.changeTurn();
+      console.log("Tour: " + this.gameHelper.getCurrentPlayer());
+    } else {
+      alert("Impossible d'effectuer le déplacement");
+    }
   }
 }

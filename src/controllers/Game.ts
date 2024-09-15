@@ -1,10 +1,15 @@
 import { GREEN_COLOR, RED_COLOR } from "../helpers/constants.js";
+import { Board } from "../models/Board.js";
 
 export class Game {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private cellSize: number;
   private boardMatrix: number[][];
+  private selectedRow: number = -1;
+  private selectedCol: number = -1;
+
+  board = new Board();
 
   constructor(boardMatrix: number[][]) {
     this.canvas = document.getElementById("board") as HTMLCanvasElement;
@@ -14,6 +19,9 @@ export class Game {
     this.cellSize = (this.canvas.width - 80) / 2; // grille de 2x2
     this.boardMatrix = boardMatrix;
     this.renderBoard();
+
+    // Événement click
+    this.canvas.addEventListener("click", (e) => this.handleGridClick(e));
   }
 
   public adjustCanvasSize() {
@@ -29,6 +37,7 @@ export class Game {
     this.drawGrid();
     this.drawDiagonals();
     this.drawPawns();
+    console.log(this.board.getBoard());
   }
 
   public drawGrid() {
@@ -69,7 +78,7 @@ export class Game {
     this.ctx.stroke();
   }
 
-  private drawPawns() {
+  public drawPawns() {
     for (let row = 0; row < 3; row++) {
       for (let col = 0; col < 3; col++) {
         if (this.boardMatrix[row][col] === 2) {
@@ -79,6 +88,8 @@ export class Game {
         } else {
           continue;
         }
+
+        // Dessiner le pion
         const x = col * this.cellSize + 40;
         const y = row * this.cellSize + 40;
 
@@ -87,5 +98,83 @@ export class Game {
         this.ctx.fill();
       }
     }
+  }
+
+  private handleGridClick(event: MouseEvent) {
+    const rect = this.canvas.getBoundingClientRect();
+
+    // Fixer le click à l'intérieur du canvas
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    if (this.selectedRow === -1 && this.selectedCol === -1) {
+      // Premier clic : sélectionner un pion
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          if (this.boardMatrix[row][col] !== 0) {
+            // Position de chaque pion
+            if (this.validatePawn(col, row, clickX, clickY)) {
+              this.selectedRow = row;
+              this.selectedCol = col;
+              break;
+            }
+          }
+        }
+      }
+    } else {
+      // Deuxième clic : déplacer le pion
+      let currentRow = -1;
+      let currentCol = -1;
+
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          if (this.validatePawn(col, row, clickX, clickY)) {
+            currentRow = row;
+            currentCol = col;
+            break;
+          }
+        }
+      }
+
+      if (currentRow !== -1 && currentCol !== -1) {
+        console.log(
+          `Case sélectionné : row=${this.selectedRow}, col=${this.selectedCol}`
+        );
+        console.log(`Case actuel : row=${currentRow}, col=${currentCol}`);
+        this.board.movePawn(
+          this.selectedRow,
+          this.selectedCol,
+          currentRow,
+          currentCol
+        );
+        this.boardMatrix = this.board.getBoard();
+        this.renderBoard();
+      }
+
+      //réinitialisation
+      this.selectedRow = -1;
+      this.selectedCol = -1;
+    }
+  }
+
+  public validatePawn(
+    col: number,
+    row: number,
+    clickX: number,
+    clickY: number
+  ): boolean {
+    const x = col * this.cellSize + 40;
+    const y = row * this.cellSize + 40;
+
+    // 15: diamètre de chaque pion
+    if (
+      clickX >= x - 15 &&
+      clickX <= x + 15 &&
+      clickY >= y - 15 &&
+      clickY <= y + 15
+    ) {
+      return true;
+    }
+    return false;
   }
 }
