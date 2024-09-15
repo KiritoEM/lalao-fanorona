@@ -121,6 +121,7 @@ export class FanoronaGame {
               this.drawSuggestions(
                 this.board.suggestMoves(this.selectedRow, this.selectedCol)
               );
+              this.drawSelectedPawnBorder();
 
               return;
             }
@@ -196,5 +197,19 @@ export class FanoronaGame {
       this.ctx.arc(x, y, 17, 0, 2 * Math.PI);
       this.ctx.fill();
     });
+  }
+
+  private drawSelectedPawnBorder() {
+    if (this.selectedRow !== -1 && this.selectedCol !== -1) {
+      const x = this.selectedCol * this.cellSize + 40;
+      const y = this.selectedRow * this.cellSize + 40;
+
+      this.ctx.strokeStyle = "yellow";
+      this.ctx.lineWidth = 3;
+
+      this.ctx.beginPath();
+      this.ctx.arc(x, y, 15, 0, 2 * Math.PI);
+      this.ctx.stroke();
+    }
   }
 }
