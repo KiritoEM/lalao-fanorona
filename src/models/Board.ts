@@ -55,11 +55,12 @@ export class Board {
   public suggestMoves(row: number, col: number): number[][] {
     let moves: number[][] = [];
 
+    //mouvements possibles
     const linearMoves = [
-      [row - 1, col], //gauche
-      [row + 1, col], //droite
-      [row, col - 1], //ascendant
-      [row, col + 1], //descendant
+      [row - 1, col],
+      [row + 1, col],
+      [row, col - 1],
+      [row, col + 1],
     ];
 
     const diagonalMoves = [
@@ -69,16 +70,37 @@ export class Board {
       [row + 1, col + 1],
     ];
 
+    const isValidMove = (move: number[]): boolean => {
+      //pur s' assurer que les actions sont dans la matrice
+      const [newRow, newCol] = move;
+      return (
+        newRow >= 0 &&
+        newRow < this.board.length &&
+        newCol >= 0 &&
+        newCol < this.board[0].length &&
+        this.board[newRow][newCol] === 0 &&
+        this.board[row][col] === (this.gameHelper.getCurrentPlayer() as number)
+      );
+    };
+
     //mouvement valides
     linearMoves.forEach((move) => {
-      if (this.boardHelper.canMove(row, col, move[1], move[0])) {
+      if (
+        this.boardHelper.canMove(row, col, move[1], move[0]) &&
+        isValidMove(move)
+      ) {
         moves.push(move);
+        console.log("linear suggest" + move);
       }
     });
 
     diagonalMoves.forEach((move) => {
-      if (this.boardHelper.canMove(row, col, move[1], move[0])) {
+      if (
+        this.boardHelper.canMove(row, col, move[1], move[0]) &&
+        isValidMove(move)
+      ) {
         moves.push(move);
+        console.log("diagonal suggest" + move);
       }
     });
 

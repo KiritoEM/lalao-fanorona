@@ -100,6 +100,7 @@ export class FanoronaGame {
                         if (this.validatePawn(col, row, clickX, clickY)) {
                             this.selectedRow = row;
                             this.selectedCol = col;
+                            this.drawSuggestions(this.board.suggestMoves(this.selectedRow, this.selectedCol));
                             break;
                         }
                     }
@@ -143,5 +144,15 @@ export class FanoronaGame {
             return true;
         }
         return false;
+    }
+    drawSuggestions(moves) {
+        this.ctx.fillStyle = "rgb(255, 195, 0, 0.65)";
+        moves.forEach((move) => {
+            const x = move[1] * this.cellSize + 40;
+            const y = move[0] * this.cellSize + 40;
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, 17, 0, 2 * Math.PI);
+            this.ctx.fill();
+        });
     }
 }
