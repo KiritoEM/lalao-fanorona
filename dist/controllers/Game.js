@@ -2,6 +2,7 @@ import { GREEN_COLOR, RED_COLOR } from "../helpers/constants.js";
 import { GameHelper } from "../helpers/GameHelper.js";
 import { Board } from "../models/Board.js";
 import { Computer } from "../models/Computer.js";
+import { PlayerType } from "../utils/types.js";
 export class FanoronaGame {
     constructor() {
         this.selectedRow = -1;
@@ -115,15 +116,22 @@ export class FanoronaGame {
             if (currentRow !== -1 && currentCol !== -1) {
                 console.log(`Case sélectionnée : row=${this.selectedRow}, col=${this.selectedCol}`);
                 console.log(`Case actuelle : row=${currentRow}, col=${currentCol}`);
-                this.board.movePawn(this.selectedRow, this.selectedCol, currentRow, currentCol);
-                this.boardMatrix = this.board.getBoard();
-                this.renderBoard();
-                // Laisser l'IA jouer après le joueur humain
-                setTimeout(() => {
-                    this.computer.computerMove(this.board, 3, this.gameHelper.getCurrentPlayer());
+                console.log(`tour actuel: ${this.gameHelper.getCurrentPlayer()}`);
+                if (this.gameHelper.getCurrentPlayer() === PlayerType.player1) {
+                    this.board.movePawn(this.selectedRow, this.selectedCol, currentRow, currentCol);
+                    this.gameHelper.changeTurn();
                     this.boardMatrix = this.board.getBoard();
                     this.renderBoard();
-                }, 500); // Attendre 500 ms avant que l'IA ne joue
+                }
+                if (this.gameHelper.getCurrentPlayer() === PlayerType.player2) {
+                    console.log("AI tour");
+                    const [predictRow, predictedCol] = this.computer.computerMove(this.board, 3, this.gameHelper.getCurrentPlayer());
+                    console.log(`selectedPawn: [${this.selectedRow}][${this.selectedCol}]; predictedCoord: [${predictRow}][${predictedCol}]`);
+                    this.board.movePawn(this.selectedRow, this.selectedCol, predictRow, predictedCol);
+                    this.gameHelper.changeTurn(); // Changement de tour ici
+                    this.boardMatrix = this.board.getBoard();
+                    this.renderBoard();
+                }
             }
             this.selectedRow = -1;
             this.selectedCol = -1;

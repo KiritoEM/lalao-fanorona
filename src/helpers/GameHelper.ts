@@ -1,11 +1,7 @@
 import { PlayerType } from "../utils/types.js";
 
 export class GameHelper {
-  private currentPlayer: PlayerType;
-
-  constructor() {
-    this.currentPlayer = PlayerType.player1; //par défaut le joueur 1 commence
-  }
+  private currentPlayer: PlayerType = PlayerType.player1;
 
   public getCurrentPlayer(): PlayerType {
     return this.currentPlayer;
