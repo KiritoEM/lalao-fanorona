@@ -1,3 +1,4 @@
+import { BoardHelper } from "../helpers/BoardHelper.js";
 import { GREEN_COLOR, RED_COLOR } from "../helpers/constants.js";
 import { Board } from "../models/Board.js";
 
@@ -11,6 +12,7 @@ export class FanoronaGame {
 
   //instanciation de la classe Board
   board = new Board();
+  boardHelper = new BoardHelper();
 
   constructor() {
     this.canvas = document.getElementById("board") as HTMLCanvasElement;

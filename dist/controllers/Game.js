@@ -1,3 +1,4 @@
+import { BoardHelper } from "../helpers/BoardHelper.js";
 import { GREEN_COLOR, RED_COLOR } from "../helpers/constants.js";
 import { Board } from "../models/Board.js";
 export class FanoronaGame {
@@ -6,6 +7,7 @@ export class FanoronaGame {
         this.selectedCol = -1;
         //instanciation de la classe Board
         this.board = new Board();
+        this.boardHelper = new BoardHelper();
         this.canvas = document.getElementById("board");
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;

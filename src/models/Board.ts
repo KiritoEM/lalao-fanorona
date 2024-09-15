@@ -51,4 +51,37 @@ export class Board {
       alert("Déplacement invalide");
     }
   }
+
+  public suggestMoves(row: number, col: number): number[][] {
+    let moves: number[][] = [];
+
+    const linearMoves = [
+      [row - 1, col], //gauche
+      [row + 1, col], //droite
+      [row, col - 1], //ascendant
+      [row, col + 1], //descendant
+    ];
+
+    const diagonalMoves = [
+      [row - 1, col - 1],
+      [row - 1, col + 1],
+      [row + 1, col - 1],
+      [row + 1, col + 1],
+    ];
+
+    //mouvement valides
+    linearMoves.forEach((move) => {
+      if (this.boardHelper.canMove(row, col, move[1], move[0])) {
+        moves.push(move);
+      }
+    });
+
+    diagonalMoves.forEach((move) => {
+      if (this.boardHelper.canMove(row, col, move[1], move[0])) {
+        moves.push(move);
+      }
+    });
+
+    return moves;
+  }
 }
