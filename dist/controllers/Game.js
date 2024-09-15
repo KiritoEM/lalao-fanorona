@@ -4,7 +4,7 @@ export class FanoronaGame {
     constructor() {
         this.selectedRow = -1;
         this.selectedCol = -1;
-        // Instanciation de la classe Board
+        //instanciation de la classe Board
         this.board = new Board();
         this.canvas = document.getElementById("board");
         this.ctx = this.canvas.getContext("2d");
@@ -63,12 +63,9 @@ export class FanoronaGame {
         this.ctx.lineTo(40, this.canvas.height - 40);
         this.ctx.stroke();
     }
-    drawPawns(excludeRow = -1, excludeCol = -1) {
+    drawPawns() {
         for (let row = 0; row < 3; row++) {
             for (let col = 0; col < 3; col++) {
-                //exclusion du pion en mouvement pour qu' il ne soit pas redessiné
-                if (row === excludeRow && col === excludeCol)
-                    continue;
                 if (this.boardMatrix[row][col] === 2) {
                     this.ctx.fillStyle = RED_COLOR;
                 }
@@ -78,6 +75,7 @@ export class FanoronaGame {
                 else {
                     continue;
                 }
+                // Dessiner le pion
                 const x = col * this.cellSize + 40;
                 const y = row * this.cellSize + 40;
                 this.ctx.beginPath();
@@ -92,9 +90,11 @@ export class FanoronaGame {
         const clickX = event.clientX - rect.left;
         const clickY = event.clientY - rect.top;
         if (this.selectedRow === -1 && this.selectedCol === -1) {
+            // Premier clic : sélectionner un pion
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
                     if (this.boardMatrix[row][col] !== 0) {
+                        // Position de chaque pion
                         if (this.validatePawn(col, row, clickX, clickY)) {
                             this.selectedRow = row;
                             this.selectedCol = col;
@@ -105,6 +105,7 @@ export class FanoronaGame {
             }
         }
         else {
+            // Deuxième clic : déplacer le pion
             let currentRow = -1;
             let currentCol = -1;
             for (let row = 0; row < 3; row++) {
@@ -116,27 +117,17 @@ export class FanoronaGame {
                     }
                 }
             }
-            //si la case séléctionnée n' est pas vide
             if (currentRow !== -1 && currentCol !== -1) {
-                console.log(`Case sélectionnée : row=${this.selectedRow}, col=${this.selectedCol}`);
-                console.log(`Case actuelle : row=${currentRow}, col=${currentCol}`);
-                // Coordonnées de départ et d'arrivée
-                const startX = this.selectedCol * this.cellSize + 40;
-                const startY = this.selectedRow * this.cellSize + 40;
-                const endX = currentCol * this.cellSize + 40;
-                const endY = currentRow * this.cellSize + 40;
-                const color = this.boardMatrix[this.selectedRow][this.selectedCol] === 1
-                    ? GREEN_COLOR
-                    : RED_COLOR;
-                // Animation
-                this.animatePawnMovement(startX, startY, endX, endY, color, () => {
-                    // Déplacement des pions après l'animation
-                    this.board.movePawn(this.selectedRow, this.selectedCol, currentRow, currentCol);
-                    // Réinitialisation des index
-                    this.selectedRow = -1;
-                    this.selectedCol = -1;
-                });
+                console.log(`Case sélectionné : row=${this.selectedRow}, col=${this.selectedCol}`);
+                console.log(`Case actuel : row=${currentRow}, col=${currentCol}`);
+                //déplacement des pions
+                this.board.movePawn(this.selectedRow, this.selectedCol, currentRow, currentCol);
+                this.boardMatrix = this.board.getBoard();
+                this.renderBoard();
             }
+            //réinitialisation des index
+            this.selectedRow = -1;
+            this.selectedCol = -1;
         }
     }
     validatePawn(col, row, clickX, clickY) {
@@ -150,30 +141,5 @@ export class FanoronaGame {
             return true;
         }
         return false;
-    }
-    animatePawnMovement(startX, startY, endX, endY, color, callback) {
-        const duration = 500;
-        let steps = 50;
-        const deltaX = (endX - startX) / steps;
-        const deltaY = (endY - startY) / steps;
-        let currentX = startX;
-        let currentY = startY;
-        const interval = setInterval(() => {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.drawGrid();
-            this.drawDiagonals();
-            // Ne pas dessiner le pion d'origine pendant l'animation
-            this.drawPawns(this.selectedRow, this.selectedCol);
-            this.ctx.fillStyle = color;
-            this.ctx.beginPath();
-            this.ctx.arc(currentX, currentY, 15, 0, 2 * Math.PI);
-            this.ctx.fill();
-            currentX += deltaX;
-            currentY += deltaY;
-            if (--steps < 0) {
-                clearInterval(interval);
-                callback();
-            }
-        }, duration / steps);
     }
 }
