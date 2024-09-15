@@ -1,8 +1,8 @@
 import { BoardHelper } from "../helpers/BoardHelper.js";
 import { GameHelper } from "../helpers/GameHelper.js";
+import { Computer } from "./Computer.js";
 export class Board {
     constructor() {
-        // Valeur initiale du plateau de jeu
         this.board = [
             [1, 1, 1],
             [0, 0, 0],
@@ -10,6 +10,7 @@ export class Board {
         ];
         this.boardHelper = new BoardHelper();
         this.gameHelper = new GameHelper();
+        this.computer = new Computer();
     }
     getBoard() {
         return this.board;
@@ -47,15 +48,15 @@ export class Board {
         for (let col = 0; col < 3; col++) {
             if (this.board[0][col] === turn &&
                 this.board[1][col] === turn &&
-                this.board[3][col] === turn) {
+                this.board[2][col] === turn) {
                 return turn;
             }
         }
         //diagonal 1
-        for (let row = 0; row < 3; row++) {
-            if (this.board[row][row] === turn) {
-                return turn;
-            }
+        if (this.board[0][0] === turn &&
+            this.board[1][1] === turn &&
+            this.board[2][2] === turn) {
+            return turn;
         }
         //diagonal 2
         if (this.board[2][0] === turn &&
@@ -67,7 +68,6 @@ export class Board {
     }
     suggestMoves(row, col) {
         let moves = [];
-        //mouvements possibles
         const linearMoves = [
             [row - 1, col],
             [row + 1, col],
@@ -81,7 +81,6 @@ export class Board {
             [row + 1, col + 1],
         ];
         const isValidMove = (move) => {
-            //pur s' assurer que les actions sont dans la matrice
             const [newRow, newCol] = move;
             return (newRow >= 0 &&
                 newRow < this.board.length &&
@@ -90,19 +89,16 @@ export class Board {
                 this.board[newRow][newCol] === 0 &&
                 this.board[row][col] === this.gameHelper.getCurrentPlayer());
         };
-        //mouvement valides
         linearMoves.forEach((move) => {
             if (this.boardHelper.canMove(row, col, move[1], move[0]) &&
                 isValidMove(move)) {
                 moves.push(move);
-                console.log("linear suggest" + move);
             }
         });
         diagonalMoves.forEach((move) => {
             if (this.boardHelper.canMove(row, col, move[1], move[0]) &&
                 isValidMove(move)) {
                 moves.push(move);
-                console.log("diagonal suggest" + move);
             }
         });
         return moves;

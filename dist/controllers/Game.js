@@ -1,13 +1,14 @@
 import { GREEN_COLOR, RED_COLOR } from "../helpers/constants.js";
 import { GameHelper } from "../helpers/GameHelper.js";
 import { Board } from "../models/Board.js";
+import { Computer } from "../models/Computer.js";
 export class FanoronaGame {
     constructor() {
         this.selectedRow = -1;
         this.selectedCol = -1;
-        //instanciation de la classe Board
         this.board = new Board();
         this.gameHelper = new GameHelper();
+        this.computer = new Computer();
         this.canvas = document.getElementById("board");
         this.ctx = this.canvas.getContext("2d");
         this.ctx.imageSmoothingEnabled = false;
@@ -17,7 +18,6 @@ export class FanoronaGame {
     }
     start() {
         this.renderBoard();
-        // Événement click
         this.canvas.addEventListener("click", (e) => this.handleGridClick(e));
     }
     adjustCanvasSize() {
@@ -36,14 +36,12 @@ export class FanoronaGame {
     drawGrid() {
         this.ctx.strokeStyle = "#000";
         this.ctx.lineWidth = 2;
-        // lignes verticales
         for (let col = 0; col < 3; col++) {
             this.ctx.beginPath();
             this.ctx.moveTo(col * this.cellSize + 40, 40);
             this.ctx.lineTo(col * this.cellSize + 40, this.canvas.height - 40);
             this.ctx.stroke();
         }
-        // lignes horizontales
         for (let row = 0; row < 3; row++) {
             this.ctx.beginPath();
             this.ctx.moveTo(40, row * this.cellSize + 40);
@@ -54,12 +52,10 @@ export class FanoronaGame {
     drawDiagonals() {
         this.ctx.strokeStyle = "#000";
         this.ctx.lineWidth = 2;
-        // Diagonale principale
         this.ctx.beginPath();
         this.ctx.moveTo(40, 40);
         this.ctx.lineTo(this.canvas.width - 40, this.canvas.height - 40);
         this.ctx.stroke();
-        // Diagonale secondaire
         this.ctx.beginPath();
         this.ctx.moveTo(this.canvas.width - 40, 40);
         this.ctx.lineTo(40, this.canvas.height - 40);
@@ -77,7 +73,6 @@ export class FanoronaGame {
                 else {
                     continue;
                 }
-                // Dessiner le pion
                 const x = col * this.cellSize + 40;
                 const y = row * this.cellSize + 40;
                 this.ctx.beginPath();
@@ -90,7 +85,6 @@ export class FanoronaGame {
         const rect = this.canvas.getBoundingClientRect();
         const clickX = event.clientX - rect.left;
         const clickY = event.clientY - rect.top;
-        //click du premier pion
         if (this.selectedRow === -1 && this.selectedCol === -1) {
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
@@ -107,7 +101,6 @@ export class FanoronaGame {
             }
         }
         else {
-            //click du deuxième pion
             let currentRow = -1;
             let currentCol = -1;
             for (let row = 0; row < 3; row++) {
@@ -120,14 +113,18 @@ export class FanoronaGame {
                 }
             }
             if (currentRow !== -1 && currentCol !== -1) {
-                console.log(`Case sélectionné : row=${this.selectedRow}, col=${this.selectedCol}`);
-                console.log(`Case actuel : row=${currentRow}, col=${currentCol}`);
-                //déplacement des pions
+                console.log(`Case sélectionnée : row=${this.selectedRow}, col=${this.selectedCol}`);
+                console.log(`Case actuelle : row=${currentRow}, col=${currentCol}`);
                 this.board.movePawn(this.selectedRow, this.selectedCol, currentRow, currentCol);
                 this.boardMatrix = this.board.getBoard();
                 this.renderBoard();
+                // Laisser l'IA jouer après le joueur humain
+                setTimeout(() => {
+                    this.computer.computerMove(this.board, 3, this.gameHelper.getCurrentPlayer());
+                    this.boardMatrix = this.board.getBoard();
+                    this.renderBoard();
+                }, 500); // Attendre 500 ms avant que l'IA ne joue
             }
-            //réinitialisation des index
             this.selectedRow = -1;
             this.selectedCol = -1;
         }
@@ -135,7 +132,6 @@ export class FanoronaGame {
     validatePawn(col, row, clickX, clickY) {
         const x = col * this.cellSize + 40;
         const y = row * this.cellSize + 40;
-        // 15: diamètre de chaque pion
         if (clickX >= x - 15 &&
             clickX <= x + 15 &&
             clickY >= y - 15 &&

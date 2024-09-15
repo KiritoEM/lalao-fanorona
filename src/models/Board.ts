@@ -1,9 +1,9 @@
 import { BoardHelper } from "../helpers/BoardHelper.js";
 import { GameHelper } from "../helpers/GameHelper.js";
 import { PlayerType } from "../utils/types.js";
+import { Computer } from "./Computer.js";
 
 export class Board {
-  // Valeur initiale du plateau de jeu
   private board: number[][] = [
     [1, 1, 1],
     [0, 0, 0],
@@ -12,6 +12,7 @@ export class Board {
 
   boardHelper = new BoardHelper();
   gameHelper = new GameHelper();
+  computer = new Computer();
 
   constructor() {}
 
@@ -68,17 +69,19 @@ export class Board {
       if (
         this.board[0][col] === turn &&
         this.board[1][col] === turn &&
-        this.board[3][col] === turn
+        this.board[2][col] === turn
       ) {
         return turn as number;
       }
     }
 
     //diagonal 1
-    for (let row = 0; row < 3; row++) {
-      if (this.board[row][row] === turn) {
-        return turn as number;
-      }
+    if (
+      this.board[0][0] === turn &&
+      this.board[1][1] === turn &&
+      this.board[2][2] === turn
+    ) {
+      return turn as number;
     }
 
     //diagonal 2
@@ -96,7 +99,6 @@ export class Board {
   public suggestMoves(row: number, col: number): number[][] {
     let moves: number[][] = [];
 
-    //mouvements possibles
     const linearMoves = [
       [row - 1, col],
       [row + 1, col],
@@ -112,7 +114,6 @@ export class Board {
     ];
 
     const isValidMove = (move: number[]): boolean => {
-      //pur s' assurer que les actions sont dans la matrice
       const [newRow, newCol] = move;
       return (
         newRow >= 0 &&
@@ -124,14 +125,12 @@ export class Board {
       );
     };
 
-    //mouvement valides
     linearMoves.forEach((move) => {
       if (
         this.boardHelper.canMove(row, col, move[1], move[0]) &&
         isValidMove(move)
       ) {
         moves.push(move);
-        console.log("linear suggest" + move);
       }
     });
 
@@ -141,7 +140,6 @@ export class Board {
         isValidMove(move)
       ) {
         moves.push(move);
-        console.log("diagonal suggest" + move);
       }
     });
 

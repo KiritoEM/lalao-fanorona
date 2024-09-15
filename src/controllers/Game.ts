@@ -1,6 +1,7 @@
 import { GREEN_COLOR, RED_COLOR } from "../helpers/constants.js";
 import { GameHelper } from "../helpers/GameHelper.js";
 import { Board } from "../models/Board.js";
+import { Computer } from "../models/Computer.js";
 
 export class FanoronaGame {
   private canvas: HTMLCanvasElement;
@@ -10,9 +11,9 @@ export class FanoronaGame {
   private selectedRow: number = -1;
   private selectedCol: number = -1;
 
-  //instanciation de la classe Board
   board = new Board();
   gameHelper = new GameHelper();
+  computer = new Computer();
 
   constructor() {
     this.canvas = document.getElementById("board") as HTMLCanvasElement;
@@ -25,8 +26,6 @@ export class FanoronaGame {
 
   public start(): void {
     this.renderBoard();
-
-    // Événement click
     this.canvas.addEventListener("click", (e) => this.handleGridClick(e));
   }
 
@@ -49,7 +48,6 @@ export class FanoronaGame {
     this.ctx.strokeStyle = "#000";
     this.ctx.lineWidth = 2;
 
-    // lignes verticales
     for (let col = 0; col < 3; col++) {
       this.ctx.beginPath();
       this.ctx.moveTo(col * this.cellSize + 40, 40);
@@ -57,7 +55,6 @@ export class FanoronaGame {
       this.ctx.stroke();
     }
 
-    // lignes horizontales
     for (let row = 0; row < 3; row++) {
       this.ctx.beginPath();
       this.ctx.moveTo(40, row * this.cellSize + 40);
@@ -70,13 +67,11 @@ export class FanoronaGame {
     this.ctx.strokeStyle = "#000";
     this.ctx.lineWidth = 2;
 
-    // Diagonale principale
     this.ctx.beginPath();
     this.ctx.moveTo(40, 40);
     this.ctx.lineTo(this.canvas.width - 40, this.canvas.height - 40);
     this.ctx.stroke();
 
-    // Diagonale secondaire
     this.ctx.beginPath();
     this.ctx.moveTo(this.canvas.width - 40, 40);
     this.ctx.lineTo(40, this.canvas.height - 40);
@@ -94,7 +89,6 @@ export class FanoronaGame {
           continue;
         }
 
-        // Dessiner le pion
         const x = col * this.cellSize + 40;
         const y = row * this.cellSize + 40;
 
@@ -107,11 +101,9 @@ export class FanoronaGame {
 
   private handleGridClick(event: MouseEvent) {
     const rect = this.canvas.getBoundingClientRect();
-
     const clickX = event.clientX - rect.left;
     const clickY = event.clientY - rect.top;
 
-    //click du premier pion
     if (this.selectedRow === -1 && this.selectedCol === -1) {
       for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
@@ -123,14 +115,12 @@ export class FanoronaGame {
                 this.board.suggestMoves(this.selectedRow, this.selectedCol)
               );
               this.drawSelectedPawnBorder();
-
               return;
             }
           }
         }
       }
     } else {
-      //click du deuxième pion
       let currentRow = -1;
       let currentCol = -1;
 
@@ -146,11 +136,10 @@ export class FanoronaGame {
 
       if (currentRow !== -1 && currentCol !== -1) {
         console.log(
-          `Case sélectionné : row=${this.selectedRow}, col=${this.selectedCol}`
+          `Case sélectionnée : row=${this.selectedRow}, col=${this.selectedCol}`
         );
-        console.log(`Case actuel : row=${currentRow}, col=${currentCol}`);
+        console.log(`Case actuelle : row=${currentRow}, col=${currentCol}`);
 
-        //déplacement des pions
         this.board.movePawn(
           this.selectedRow,
           this.selectedCol,
@@ -159,9 +148,19 @@ export class FanoronaGame {
         );
         this.boardMatrix = this.board.getBoard();
         this.renderBoard();
+
+        // Laisser l'IA jouer après le joueur humain
+        setTimeout(() => {
+          this.computer.computerMove(
+            this.board,
+            3,
+            this.gameHelper.getCurrentPlayer()
+          );
+          this.boardMatrix = this.board.getBoard();
+          this.renderBoard();
+        }, 500); // Attendre 500 ms avant que l'IA ne joue
       }
 
-      //réinitialisation des index
       this.selectedRow = -1;
       this.selectedCol = -1;
     }
@@ -176,7 +175,6 @@ export class FanoronaGame {
     const x = col * this.cellSize + 40;
     const y = row * this.cellSize + 40;
 
-    // 15: diamètre de chaque pion
     if (
       clickX >= x - 15 &&
       clickX <= x + 15 &&
@@ -190,7 +188,6 @@ export class FanoronaGame {
 
   public drawSuggestions(moves: number[][]) {
     this.ctx.fillStyle = "rgb(255, 195, 0, 0.65)";
-
     moves.forEach((move) => {
       const x = move[1] * this.cellSize + 40;
       const y = move[0] * this.cellSize + 40;

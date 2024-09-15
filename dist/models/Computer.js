@@ -1,31 +1,48 @@
 import { PlayerType } from "../utils/types.js";
 export class Computer {
     constructor() {
-        this.AIPlayer = PlayerType.player1;
-        this.player = PlayerType.player2;
-        this.alpha = -Infinity;
-        this.beta = Infinity;
+        this.AIPlayer = PlayerType.player2;
+        this.player = PlayerType.player1;
     }
-    computerMove(board) {
-        let boarderState = board.getBoard();
+    computerMove(board, depth, turn) {
+        let boardState = board.getBoard();
+        let bestScore = -Infinity;
+        let bestMove = [-1, -1];
+        let alpha = -Infinity;
+        let beta = Infinity;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (boardState[i][j] === 0) {
+                    boardState[i][j] = this.AIPlayer;
+                    let score = this.minimax(depth, alpha, beta, false, board, turn);
+                    boardState[i][j] = 0;
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = [i, j];
+                    }
+                }
+            }
+        }
+        if (bestMove[0] !== -1 && bestMove[1] !== -1) {
+            console.log(bestMove);
+            return bestMove;
+        }
+        return [];
     }
-    //focntion minimax récursive
     minimax(depth, alpha, beta, isMaximizing, board, turn) {
-        let boarderState = board.getBoard();
         let winner = board.checkWinner(turn);
-        //condition d' arrêt de la fonction récursive
         if (winner === 1)
-            return 1; // l' IA gagne
+            return 1;
         if (winner === 2)
-            return -1; // le joueur gagne
+            return -1;
         if (isMaximizing) {
-            let maxScore = Infinity;
+            let maxScore = -Infinity;
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
-                    if (boarderState[i][j] === 0) {
-                        boarderState[i][j] = this.AIPlayer;
+                    if (board.getBoard()[i][j] === 0) {
+                        board.getBoard()[i][j] = this.AIPlayer;
                         let score = this.minimax(depth - 1, alpha, beta, false, board, turn);
-                        boarderState[i][j] = 0;
+                        board.getBoard()[i][j] = 0;
                         maxScore = Math.max(maxScore, score);
                         alpha = Math.max(alpha, score);
                         if (beta <= alpha) {
@@ -40,10 +57,10 @@ export class Computer {
             let minScore = Infinity;
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
-                    if (boarderState[i][j] === 0) {
-                        boarderState[i][j] = this.player;
+                    if (board.getBoard()[i][j] === 0) {
+                        board.getBoard()[i][j] = this.player;
                         let score = this.minimax(depth + 1, alpha, beta, true, board, turn);
-                        boarderState[i][j] = 0;
+                        board.getBoard()[i][j] = 0;
                         minScore = Math.min(minScore, score);
                         beta = Math.max(beta, score);
                         if (beta <= alpha) {
