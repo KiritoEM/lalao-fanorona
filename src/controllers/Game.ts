@@ -159,13 +159,18 @@ export class FanoronaGame {
           console.log("AI tour");
           const move = this.computer.computerMove(
             this.board,
-            5,
+            8,
             this.gameHelper.getCurrentPlayer()
           );
-        
+
           if (move) {
             const [row, col, predictRow, predictedCol] = move;
-            console.log("depuis game.ts: " + row, col, predictRow, predictedCol);
+            console.log(
+              "depuis game.ts: " + row,
+              col,
+              predictRow,
+              predictedCol
+            );
             console.log(
               `selectedPawn: [${this.selectedRow}][${this.selectedCol}]; predictedCoord: [${predictRow}][${predictedCol}]`
             );
@@ -179,7 +184,6 @@ export class FanoronaGame {
           }
         }
       }
-        
 
       this.selectedRow = -1;
       this.selectedCol = -1;

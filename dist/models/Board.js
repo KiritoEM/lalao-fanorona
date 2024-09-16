@@ -40,7 +40,9 @@ export class Board {
         //     this.board[row][1] === turn &&
         //     this.board[row][2] === turn
         //   ) {
-        //     console.log(`Le joueur ${turn} a gagné`);
+        //     setTimeout(() => {
+        //       alert(`Le joueur ${turn} a gagné`);
+        //     }, 600);
         //     return turn as number;
         //   }
         // }
@@ -49,7 +51,9 @@ export class Board {
             if (this.board[0][col] === turn &&
                 this.board[1][col] === turn &&
                 this.board[2][col] === turn) {
-                console.log(`Le joueur ${turn} a gagné`);
+                setTimeout(() => {
+                    alert(`Le joueur ${turn} a gagné`);
+                }, 600);
                 return turn;
             }
         }
@@ -57,14 +61,18 @@ export class Board {
         if (this.board[0][0] === turn &&
             this.board[1][1] === turn &&
             this.board[2][2] === turn) {
-            console.log(`Le joueur ${turn} a gagné`);
+            setTimeout(() => {
+                alert(`Le joueur ${turn} a gagné`);
+            }, 600);
             return turn;
         }
         //diagonal 2
         if (this.board[2][0] === turn &&
             this.board[1][1] === turn &&
             this.board[0][2] === turn) {
-            console.log(`Le joueur ${turn} a gagné`);
+            setTimeout(() => {
+                alert(`Le joueur ${turn} a gagné`);
+            }, 600);
             return turn;
         }
         return null;

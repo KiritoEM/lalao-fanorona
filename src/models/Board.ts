@@ -56,10 +56,13 @@ export class Board {
     //     this.board[row][1] === turn &&
     //     this.board[row][2] === turn
     //   ) {
-    //     console.log(`Le joueur ${turn} a gagné`);
+    //     setTimeout(() => {
+    //       alert(`Le joueur ${turn} a gagné`);
+    //     }, 600);
     //     return turn as number;
     //   }
     // }
+
     //colonne
     for (let col = 0; col < 3; col++) {
       if (
@@ -67,7 +70,9 @@ export class Board {
         this.board[1][col] === turn &&
         this.board[2][col] === turn
       ) {
-        console.log(`Le joueur ${turn} a gagné`);
+        setTimeout(() => {
+          alert(`Le joueur ${turn} a gagné`);
+        }, 600);
         return turn as number;
       }
     }
@@ -78,7 +83,9 @@ export class Board {
       this.board[1][1] === turn &&
       this.board[2][2] === turn
     ) {
-      console.log(`Le joueur ${turn} a gagné`);
+      setTimeout(() => {
+        alert(`Le joueur ${turn} a gagné`);
+      }, 600);
       return turn as number;
     }
 
@@ -88,7 +95,9 @@ export class Board {
       this.board[1][1] === turn &&
       this.board[0][2] === turn
     ) {
-      console.log(`Le joueur ${turn} a gagné`); 
+      setTimeout(() => {
+        alert(`Le joueur ${turn} a gagné`);
+      }, 600);
       return turn as number;
     }
 

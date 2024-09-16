@@ -5,22 +5,32 @@ export class Computer {
   private AIPlayer: PlayerType = PlayerType.player2;
   private player: PlayerType = PlayerType.player1;
 
-  public getAIPawn(board: number[][]): number[] {
+  public getAIPawn(board: Board): number[] {
     let AIPawns = [];
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if (board[i][j] === this.AIPlayer) {
+        if (board.getBoard()[i][j] === this.AIPlayer) {
           AIPawns.push([i, j]);
         }
       }
     }
 
-    if (AIPawns.length === 0) {
-      return [];
-    }
+    while (AIPawns.length > 0) {
+      let pawn: any = AIPawns[Math.floor(Math.random() * AIPawns.length)];
+      let movePossibles = board.suggestMoves(pawn[0], pawn[1]);
 
-    return AIPawns[Math.floor(Math.random() * AIPawns.length)];
+      if (movePossibles.length > 0) {
+        return pawn;
+      }
+
+      AIPawns = AIPawns.filter((p) => p !== pawn);
+
+      if (AIPawns.length === 0) {
+        break;
+      }
+    }
+    return [];
   }
 
   public computerMove(board: Board, depth: number, turn: PlayerType): number[] {
@@ -29,7 +39,7 @@ export class Computer {
     let alpha: number = -Infinity;
     let beta: number = Infinity;
 
-    let AIPawn = this.getAIPawn(board.getBoard());
+    let AIPawn = this.getAIPawn(board);
     if (AIPawn.length === 0) {
       return [];
     }
@@ -37,6 +47,10 @@ export class Computer {
     let [i, j] = AIPawn;
     let movePossibles = board.suggestMoves(i, j);
     console.log(`suggest moves: ${movePossibles}`);
+    if (movePossibles.length === 0) {
+      return [];
+    }
+
     for (let move of movePossibles) {
       let [newRow, newCol] = move;
       board.movePawn(i, j, newRow, newCol);
@@ -81,13 +95,17 @@ export class Computer {
     if (isMaximizing) {
       let maxEval = -Infinity;
 
-      let AIPawn = this.getAIPawn(boardState);
+      let AIPawn = this.getAIPawn(board);
       if (AIPawn.length === 0) {
         return 0;
       }
 
       let [i, j] = AIPawn;
       let movePossibles = board.suggestMoves(i, j);
+      if (movePossibles.length === 0) {
+        return 0;
+      }
+
       for (let move of movePossibles) {
         let [newRow, newCol] = move;
 
@@ -109,13 +127,17 @@ export class Computer {
     } else {
       let minEval = Infinity;
 
-      let AIPawn = this.getAIPawn(boardState);
+      let AIPawn = this.getAIPawn(board);
       if (AIPawn.length === 0) {
         return 0;
       }
 
       let [i, j] = AIPawn;
       let movePossibles = board.suggestMoves(i, j);
+      if (movePossibles.length === 0) {
+        return 0;
+      }
+
       for (let move of movePossibles) {
         let [newRow, newCol] = move;
 
