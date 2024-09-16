@@ -71,6 +71,7 @@ export class Board {
           setTimeout(() => {
             alert(`Le joueur ${turn} a gagné`);
           }, 600);
+          this.resetBoard();
           return turn as number;
         }
       }
@@ -85,6 +86,7 @@ export class Board {
           setTimeout(() => {
             alert(`Le joueur ${turn} a gagné`);
           }, 600);
+          this.resetBoard();
           return turn as number;
         }
       }
@@ -98,6 +100,7 @@ export class Board {
         setTimeout(() => {
           alert(`Le joueur ${turn} a gagné`);
         }, 600);
+        this.resetBoard();
         return turn as number;
       }
 
@@ -110,6 +113,7 @@ export class Board {
         setTimeout(() => {
           alert(`Le joueur ${turn} a gagné`);
         }, 600);
+        this.resetBoard();
         return turn as number;
       }
     }

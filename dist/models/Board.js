@@ -53,6 +53,7 @@ export class Board {
                     setTimeout(() => {
                         alert(`Le joueur ${turn} a gagné`);
                     }, 600);
+                    this.resetBoard();
                     return turn;
                 }
             }
@@ -64,6 +65,7 @@ export class Board {
                     setTimeout(() => {
                         alert(`Le joueur ${turn} a gagné`);
                     }, 600);
+                    this.resetBoard();
                     return turn;
                 }
             }
@@ -74,6 +76,7 @@ export class Board {
                 setTimeout(() => {
                     alert(`Le joueur ${turn} a gagné`);
                 }, 600);
+                this.resetBoard();
                 return turn;
             }
             //diagonal 2
@@ -83,6 +86,7 @@ export class Board {
                 setTimeout(() => {
                     alert(`Le joueur ${turn} a gagné`);
                 }, 600);
+                this.resetBoard();
                 return turn;
             }
         }

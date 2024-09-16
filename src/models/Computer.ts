@@ -46,7 +46,6 @@ export class Computer {
 
     let [i, j] = AIPawn;
     let movePossibles = board.suggestMoves(i, j);
-    console.log(`suggest moves: ${movePossibles}`);
     if (movePossibles.length === 0) {
       return [];
     }
@@ -55,9 +54,6 @@ export class Computer {
       let [newRow, newCol] = move;
       board.movePawn(i, j, newRow, newCol);
       let score = this.minimax(depth - 1, alpha, beta, false, board, turn);
-      console.log("score: " + score);
-      console.log("bestScore: " + bestScore);
-
       board.movePawn(newRow, newCol, i, j); // Annuler le mouvement
 
       if (score > bestScore) {
@@ -109,8 +105,6 @@ export class Computer {
       for (let move of movePossibles) {
         let [newRow, newCol] = move;
 
-        console.log(`possibles moves: ${movePossibles}`);
-        console.log(newCol, newRow, i, j);
         board.movePawn(i, j, newRow, newCol);
         let score = this.minimax(depth - 1, alpha, beta, false, board, turn);
         board.movePawn(newRow, newCol, i, j); // Annuler le mouvement
@@ -129,9 +123,7 @@ export class Computer {
 
       for (let move of movePossibles) {
         let [newRow, newCol] = move;
-
-        console.log(`possibles moves: ${movePossibles}`);
-        console.log(newCol, newRow, i, j);
+        
         board.movePawn(i, j, newRow, newCol);
         let score = this.minimax(depth - 1, alpha, beta, true, board, turn);
         board.movePawn(newRow, newCol, i, j); // Annuler le mouvement
