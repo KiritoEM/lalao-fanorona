@@ -24,6 +24,7 @@ export class Computer {
         return pawn;
       }
 
+      //enlever dans le tableau des pions de l' IA le pion séléctionné
       AIPawns = AIPawns.filter((p) => p !== pawn);
 
       if (AIPawns.length === 0) {
@@ -123,7 +124,7 @@ export class Computer {
 
       for (let move of movePossibles) {
         let [newRow, newCol] = move;
-        
+
         board.movePawn(i, j, newRow, newCol);
         let score = this.minimax(depth - 1, alpha, beta, true, board, turn);
         board.movePawn(newRow, newCol, i, j); // Annuler le mouvement
