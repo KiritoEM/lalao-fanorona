@@ -43,7 +43,6 @@ export class Computer {
 
     for (let move of movePossibles) {
       let [newRow, newCol] = move;
-      board.movePawn(pawn[0], pawn[1], newRow, newCol);
       let score = this.minimax(
         depth,
         alpha,
@@ -54,13 +53,11 @@ export class Computer {
         pawn,
         movePossibles
       );
-      console.log("score: " + score);
-      console.log("bestScore: " + bestScore);
-
-      board.movePawn(newRow, newCol, pawn[0], pawn[1]); // Annuler le mouvement
 
       if (score > bestScore) {
         bestScore = score;
+        console.log("score: " + score);
+        console.log("bestScore: " + bestScore);
         bestMove = [pawn[0], pawn[1], newRow, newCol];
       }
       alpha = Math.max(alpha, score);
@@ -70,6 +67,7 @@ export class Computer {
     }
 
     if (bestMove[0] !== -1 && bestMove[1] !== -1) {
+      console.log(bestMove);
       return bestMove;
     }
 
@@ -95,60 +93,64 @@ export class Computer {
 
     if (isMaximizing) {
       let maxEval = -Infinity;
+      console.log("-------maximising---------")
 
       movePossibles.forEach((move: any) => {
-        if (boardState[move[0]][move[1]] === 0) {
-          board.setBoard(move[0], move[1], this.AIPlayer);
+        let [newRow, newCol] = move;
+        board.setBoard(newRow, newCol, this.AIPlayer);
+        console.log(`i= ${newRow} j= ${newCol}: ${boardState[newRow][newCol]}`)
 
-          let score: number = this.minimax(
-            depth - 1,
-            alpha,
-            beta,
-            false,
-            board,
-            turn,
-            pawn,
-            movePossibles
-          );
+        let score: number = this.minimax(
+          depth - 1,
+          alpha,
+          beta,
+          false,
+          board,
+          turn,
+          pawn,
+          movePossibles
+        );
 
-          board.setBoard(move[0], move[1], 0); //Annuler le mouvement
+        board.setBoard(newRow, newCol, 0); // Annuler le mouvement
+        console.log(`Score for move (${newRow}, ${newCol}): ${score}`);
 
-          maxEval = Math.max(maxEval, score);
-          alpha = Math.max(alpha, score);
+        maxEval = Math.max(maxEval, score);
+        alpha = Math.max(alpha, score);
 
-          if (beta <= alpha) {
-            return maxEval;
-          }
+        if (beta <= alpha) {
+          return maxEval;
         }
       });
 
       return maxEval;
     } else {
       let minEval = Infinity;
+      console.log("-------minimising---------")
 
       movePossibles.forEach((move: any) => {
-        if (boardState[move[0]][move[1]] === 0) {
-          board.setBoard(move[0], move[1], this.AIPlayer);
+        let [newRow, newCol] = move;
+        board.setBoard(newRow, newCol, this.player);
+        console.log(`i= ${newRow} j= ${newCol}: ${boardState[newRow][newCol]}`)
 
-          let score: number = this.minimax(
-            depth - 1,
-            alpha,
-            beta,
-            true,
-            board,
-            turn,
-            pawn,
-            movePossibles
-          );
+        let score: number = this.minimax(
+          depth - 1,
+          alpha,
+          beta,
+          true,
+          board,
+          turn,
+          pawn,
+          movePossibles
+        );
 
-          board.setBoard(move[0], move[1], 0); //Annuler le mouvement
+        board.setBoard(newRow, newCol, 0); // Annuler le mouvement
+        console.log(`Score for move (${newRow}, ${newCol}): ${score}`);
 
-          minEval = Math.min(minEval, score);
-          beta = Math.min(beta, score);
+        minEval = Math.min(minEval, score);
+        beta = Math.min(beta, score);
 
-          if (beta <= alpha) {
-            return minEval;
-          }
+        if (beta <= alpha) {
+          return minEval;
         }
       });
 
