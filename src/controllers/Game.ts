@@ -162,7 +162,7 @@ export class FanoronaGame {
     if (this.gameHelper.getCurrentPlayer() === PlayerType.player2) {
       const move = this.computer.computerMove(
         this.board,
-        5,
+        7,
         this.gameHelper.getCurrentPlayer()
       );
 

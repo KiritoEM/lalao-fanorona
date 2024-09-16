@@ -130,7 +130,7 @@ export class FanoronaGame {
     }
     handleAITurn() {
         if (this.gameHelper.getCurrentPlayer() === PlayerType.player2) {
-            const move = this.computer.computerMove(this.board, 5, this.gameHelper.getCurrentPlayer());
+            const move = this.computer.computerMove(this.board, 7, this.gameHelper.getCurrentPlayer());
             if (move) {
                 const [row, col, predictRow, predictedCol] = move;
                 this.board.movePawn(row, col, predictRow, predictedCol);
