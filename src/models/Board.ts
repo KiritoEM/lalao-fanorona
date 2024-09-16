@@ -25,6 +25,10 @@ export class Board {
     return this.board;
   }
 
+  public setBoard(i: number, j: number, val: number): void {
+    this.board[i][j] = val;
+  }
+
   public resetBoard() {
     this.board = [
       [1, 1, 1],
@@ -68,6 +72,9 @@ export class Board {
           this.board[row][1] === turn &&
           this.board[row][2] === turn
         ) {
+          setTimeout(() => {
+            alert(`Le joueur ${turn} a gagné`);
+          }, 300);
           setTimeout(() => {
             alert(`Le joueur ${turn} a gagné`);
           }, 300);

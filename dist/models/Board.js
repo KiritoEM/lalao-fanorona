@@ -20,6 +20,9 @@ export class Board {
     getBoard() {
         return this.board;
     }
+    setBoard(i, j, val) {
+        this.board[i][j] = val;
+    }
     resetBoard() {
         this.board = [
             [1, 1, 1],
@@ -50,6 +53,9 @@ export class Board {
                 if (this.board[row][0] === turn &&
                     this.board[row][1] === turn &&
                     this.board[row][2] === turn) {
+                    setTimeout(() => {
+                        alert(`Le joueur ${turn} a gagné`);
+                    }, 300);
                     setTimeout(() => {
                         alert(`Le joueur ${turn} a gagné`);
                     }, 300);
