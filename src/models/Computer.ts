@@ -24,7 +24,6 @@ export class Computer {
         return pawn;
       }
 
-      //enlever dans le tableau des pions de l' IA le pion séléctionné
       AIPawns = AIPawns.filter((p) => p !== pawn);
 
       if (AIPawns.length === 0) {

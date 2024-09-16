@@ -52,7 +52,7 @@ export class Board {
                     this.board[row][2] === turn) {
                     setTimeout(() => {
                         alert(`Le joueur ${turn} a gagné`);
-                    }, 600);
+                    }, 300);
                     this.resetBoard();
                     return turn;
                 }
@@ -64,7 +64,7 @@ export class Board {
                     this.board[2][col] === turn) {
                     setTimeout(() => {
                         alert(`Le joueur ${turn} a gagné`);
-                    }, 600);
+                    }, 300);
                     this.resetBoard();
                     return turn;
                 }
@@ -75,7 +75,7 @@ export class Board {
                 this.board[2][2] === turn) {
                 setTimeout(() => {
                     alert(`Le joueur ${turn} a gagné`);
-                }, 600);
+                }, 300);
                 this.resetBoard();
                 return turn;
             }
@@ -85,7 +85,7 @@ export class Board {
                 this.board[0][2] === turn) {
                 setTimeout(() => {
                     alert(`Le joueur ${turn} a gagné`);
-                }, 600);
+                }, 300);
                 this.resetBoard();
                 return turn;
             }
