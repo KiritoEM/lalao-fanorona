@@ -169,7 +169,7 @@ export class FanoronaGame {
       console.log("AI tour");
       const move = this.computer.computerMove(
         this.board,
-        6,
+        5,
         this.gameHelper.getCurrentPlayer()
       );
 
