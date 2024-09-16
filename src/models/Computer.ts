@@ -58,7 +58,7 @@ export class Computer {
       console.log("score: " + score);
       console.log("bestScore: " + bestScore);
 
-      board.movePawn(newRow, newCol, i, j); // Undo the move
+      board.movePawn(newRow, newCol, i, j); // Annuler le mouvement
 
       if (score > bestScore) {
         bestScore = score;
@@ -88,23 +88,23 @@ export class Computer {
     let winner = board.checkWinner(turn);
     let boardState = board.getBoard();
 
-    if (winner === 1) return -1;
-    if (winner === 2) return 1;
+    if (winner === this.player) return -1; //joueur
+    if (winner === this.AIPlayer) return 1; //IA
     if (depth === 0) return 0;
+
+    let AIPawn = this.getAIPawn(board);
+    if (AIPawn.length === 0) {
+      return 0;
+    }
+
+    let [i, j] = AIPawn;
+    let movePossibles = board.suggestMoves(i, j);
+    if (movePossibles.length === 0) {
+      return 0;
+    }
 
     if (isMaximizing) {
       let maxEval = -Infinity;
-
-      let AIPawn = this.getAIPawn(board);
-      if (AIPawn.length === 0) {
-        return 0;
-      }
-
-      let [i, j] = AIPawn;
-      let movePossibles = board.suggestMoves(i, j);
-      if (movePossibles.length === 0) {
-        return 0;
-      }
 
       for (let move of movePossibles) {
         let [newRow, newCol] = move;
@@ -113,7 +113,7 @@ export class Computer {
         console.log(newCol, newRow, i, j);
         board.movePawn(i, j, newRow, newCol);
         let score = this.minimax(depth - 1, alpha, beta, false, board, turn);
-        board.movePawn(newRow, newCol, i, j); // Undo the move
+        board.movePawn(newRow, newCol, i, j); // Annuler le mouvement
 
         maxEval = Math.max(maxEval, score);
         alpha = Math.max(alpha, score);
@@ -127,17 +127,6 @@ export class Computer {
     } else {
       let minEval = Infinity;
 
-      let AIPawn = this.getAIPawn(board);
-      if (AIPawn.length === 0) {
-        return 0;
-      }
-
-      let [i, j] = AIPawn;
-      let movePossibles = board.suggestMoves(i, j);
-      if (movePossibles.length === 0) {
-        return 0;
-      }
-
       for (let move of movePossibles) {
         let [newRow, newCol] = move;
 
@@ -145,7 +134,7 @@ export class Computer {
         console.log(newCol, newRow, i, j);
         board.movePawn(i, j, newRow, newCol);
         let score = this.minimax(depth - 1, alpha, beta, true, board, turn);
-        board.movePawn(newRow, newCol, i, j); // Undo the move
+        board.movePawn(newRow, newCol, i, j); // Annuler le mouvement
 
         minEval = Math.min(minEval, score);
         beta = Math.min(beta, score);

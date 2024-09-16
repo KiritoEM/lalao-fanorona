@@ -153,40 +153,40 @@ export class FanoronaGame {
           this.gameHelper.changeTurn();
           this.boardMatrix = this.board.getBoard();
           this.renderBoard();
-        }
 
-        if (this.gameHelper.getCurrentPlayer() === PlayerType.player2) {
-          console.log("AI tour");
-          const move = this.computer.computerMove(
-            this.board,
-            8,
-            this.gameHelper.getCurrentPlayer()
-          );
-
-          if (move) {
-            const [row, col, predictRow, predictedCol] = move;
-            console.log(
-              "depuis game.ts: " + row,
-              col,
-              predictRow,
-              predictedCol
-            );
-            console.log(
-              `selectedPawn: [${this.selectedRow}][${this.selectedCol}]; predictedCoord: [${predictRow}][${predictedCol}]`
-            );
-            this.board.movePawn(row, col, predictRow, predictedCol);
-            this.board.checkWinner(this.gameHelper.getCurrentPlayer());
-            this.gameHelper.changeTurn();
-            this.boardMatrix = this.board.getBoard();
-            this.renderBoard();
-          } else {
-            console.log("No valid move found for AI.");
-          }
+          // AI's turn
+          this.handleAITurn();
         }
       }
 
       this.selectedRow = -1;
       this.selectedCol = -1;
+    }
+  }
+
+  private handleAITurn() {
+    if (this.gameHelper.getCurrentPlayer() === PlayerType.player2) {
+      console.log("AI tour");
+      const move = this.computer.computerMove(
+        this.board,
+        5,
+        this.gameHelper.getCurrentPlayer()
+      );
+
+      if (move) {
+        const [row, col, predictRow, predictedCol] = move;
+        console.log("depuis game.ts: " + row, col, predictRow, predictedCol);
+        console.log(
+          `selectedPawn: [${this.selectedRow}][${this.selectedCol}]; predictedCoord: [${predictRow}][${predictedCol}]`
+        );
+        this.board.movePawn(row, col, predictRow, predictedCol);
+        this.board.checkWinner(this.gameHelper.getCurrentPlayer());
+        this.gameHelper.changeTurn();
+        this.boardMatrix = this.board.getBoard();
+        this.renderBoard();
+      } else {
+        console.log("No valid move found for AI.");
+      }
     }
   }
 

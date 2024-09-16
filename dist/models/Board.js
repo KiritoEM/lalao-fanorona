@@ -8,6 +8,7 @@ export class Board {
             [0, 0, 0],
             [2, 2, 2],
         ];
+        this.moveCount = 0;
         this.boardHelper = new BoardHelper();
         this.gameHelper = new GameHelper();
         this.computer = new Computer();
@@ -21,6 +22,7 @@ export class Board {
             [0, 0, 0],
             [2, 2, 2],
         ];
+        this.moveCount = 0;
     }
     movePawn(row, col, newRow, newCol) {
         if (this.boardHelper.canMove(row, col, newCol, newRow) &&
@@ -28,52 +30,53 @@ export class Board {
             if (this.board[row][col] === this.gameHelper.getCurrentPlayer()) {
                 this.board[newRow][newCol] = this.board[row][col];
                 this.board[row][col] = 0;
+                this.moveCount++;
                 this.gameHelper.changeTurn();
             }
         }
     }
     checkWinner(turn) {
-        // //ligne
-        // for (let row = 0; row < 3; row++) {
-        //   if (
-        //     this.board[row][0] === turn &&
-        //     this.board[row][1] === turn &&
-        //     this.board[row][2] === turn
-        //   ) {
-        //     setTimeout(() => {
-        //       alert(`Le joueur ${turn} a gagné`);
-        //     }, 600);
-        //     return turn as number;
-        //   }
-        // }
-        //colonne
-        for (let col = 0; col < 3; col++) {
-            if (this.board[0][col] === turn &&
-                this.board[1][col] === turn &&
-                this.board[2][col] === turn) {
+        if (this.moveCount >= 6) {
+            //ligne
+            for (let row = 0; row < 3; row++) {
+                if (this.board[row][0] === turn &&
+                    this.board[row][1] === turn &&
+                    this.board[row][2] === turn) {
+                    setTimeout(() => {
+                        alert(`Le joueur ${turn} a gagné`);
+                    }, 600);
+                    return turn;
+                }
+            }
+            //colonne
+            for (let col = 0; col < 3; col++) {
+                if (this.board[0][col] === turn &&
+                    this.board[1][col] === turn &&
+                    this.board[2][col] === turn) {
+                    setTimeout(() => {
+                        alert(`Le joueur ${turn} a gagné`);
+                    }, 600);
+                    return turn;
+                }
+            }
+            //diagonal 1
+            if (this.board[0][0] === turn &&
+                this.board[1][1] === turn &&
+                this.board[2][2] === turn) {
                 setTimeout(() => {
                     alert(`Le joueur ${turn} a gagné`);
                 }, 600);
                 return turn;
             }
-        }
-        //diagonal 1
-        if (this.board[0][0] === turn &&
-            this.board[1][1] === turn &&
-            this.board[2][2] === turn) {
-            setTimeout(() => {
-                alert(`Le joueur ${turn} a gagné`);
-            }, 600);
-            return turn;
-        }
-        //diagonal 2
-        if (this.board[2][0] === turn &&
-            this.board[1][1] === turn &&
-            this.board[0][2] === turn) {
-            setTimeout(() => {
-                alert(`Le joueur ${turn} a gagné`);
-            }, 600);
-            return turn;
+            //diagonal 2
+            if (this.board[2][0] === turn &&
+                this.board[1][1] === turn &&
+                this.board[0][2] === turn) {
+                setTimeout(() => {
+                    alert(`Le joueur ${turn} a gagné`);
+                }, 600);
+                return turn;
+            }
         }
         return null;
     }
