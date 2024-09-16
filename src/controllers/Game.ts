@@ -2,7 +2,6 @@ import { GREEN_COLOR, RED_COLOR } from "../helpers/constants.js";
 import { GameHelper } from "../helpers/GameHelper.js";
 import { Board } from "../models/Board.js";
 import { Computer } from "../models/Computer.js";
-import { Player } from "../models/Player.js";
 import { PlayerType } from "../utils/types.js";
 
 export class FanoronaGame {
@@ -150,6 +149,7 @@ export class FanoronaGame {
             currentRow,
             currentCol
           );
+          this.board.checkWinner(this.gameHelper.getCurrentPlayer());
           this.gameHelper.changeTurn();
           this.boardMatrix = this.board.getBoard();
           this.renderBoard();
@@ -157,21 +157,19 @@ export class FanoronaGame {
 
         if (this.gameHelper.getCurrentPlayer() === PlayerType.player2) {
           console.log("AI tour");
-          const [predictRow, predictedCol] = this.computer.computerMove(
-            this.board,
-            3,
-            this.gameHelper.getCurrentPlayer()
-          );
+          const [row, col, predictRow, predictedCol] =
+            this.computer.computerMove(
+              this.board,
+              5,
+              this.gameHelper.getCurrentPlayer()
+            );
+          console.log("depuis game.ts: " +row, col, predictRow, predictedCol);
           console.log(
             `selectedPawn: [${this.selectedRow}][${this.selectedCol}]; predictedCoord: [${predictRow}][${predictedCol}]`
           );
-          this.board.movePawn(
-            this.selectedRow,
-            this.selectedCol,
-            predictRow,
-            predictedCol
-          );
-          this.gameHelper.changeTurn(); // Changement de tour ici
+          this.board.movePawn(row, col, predictRow, predictedCol);
+          this.board.checkWinner(this.gameHelper.getCurrentPlayer());
+          this.gameHelper.changeTurn();
           this.boardMatrix = this.board.getBoard();
           this.renderBoard();
         }

@@ -2,35 +2,50 @@ import { PlayerType } from "../utils/types.js";
 import { Board } from "./Board.js";
 
 export class Computer {
-  constructor() {}
   private AIPlayer: PlayerType = PlayerType.player2;
   private player: PlayerType = PlayerType.player1;
 
   public computerMove(board: Board, depth: number, turn: PlayerType): number[] {
-    let boardState = board.getBoard();
     let bestScore = -Infinity;
-    let bestMove = [-1, -1];
+    let bestMove = [-1, -1, -1, -1];
     let alpha: number = -Infinity;
     let beta: number = Infinity;
 
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if (boardState[i][j] === 0) {
-          boardState[i][j] = this.AIPlayer;
+        if (board.getBoard()[i][j] === this.AIPlayer) {
+          console.log(i, j);
+          let movePossibles = board.suggestMoves(i, j);
+          console.log(`suggest moves: ${movePossibles}`);
+          for (let move of movePossibles) {
+            let [newRow, newCol] = move;
+            board.movePawn(i, j, newRow, newCol);
+            let score = this.minimax(
+              depth - 1,
+              alpha,
+              beta,
+              false,
+              board,
+              turn
+            );
+            console.log("score: " + score);
 
-          let score = this.minimax(depth, alpha, beta, false, board, turn);
-          boardState[i][j] = 0;
+            board.movePawn(newRow, newCol, i, j); // Undo the move
 
-          if (score > bestScore) {
-            bestScore = score;
-            bestMove = [i, j];
+            if (score > bestScore) {
+              bestScore = score;
+              bestMove = [i, j, newRow, newCol];
+            }
+            alpha = Math.max(alpha, score);
+            if (beta <= alpha) {
+              break;
+            }
           }
         }
       }
     }
 
     if (bestMove[0] !== -1 && bestMove[1] !== -1) {
-      console.log(bestMove);
       return bestMove;
     }
 
@@ -44,61 +59,84 @@ export class Computer {
     isMaximizing: boolean,
     board: Board,
     turn: PlayerType
-  ) {
+  ): number {
     let winner = board.checkWinner(turn);
+    let boardState = board.getBoard();
 
-    if (winner === 1) return 1;
-    if (winner === 2) return -1;
+    if (winner === 1) return -1;
+    if (winner === 2) return 1;
+    if (depth === 0) return 0;
 
     if (isMaximizing) {
-      let maxScore = -Infinity;
+      let maxEval = -Infinity;
 
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          if (board.getBoard()[i][j] === 0) {
-            board.getBoard()[i][j] = this.AIPlayer;
-            let score = this.minimax(
-              depth - 1,
-              alpha,
-              beta,
-              false,
-              board,
-              turn
-            );
-            board.getBoard()[i][j] = 0;
+          if (boardState[i][j] === this.AIPlayer) {
+            let movePossibles = board.suggestMoves(i, j);
+            for (let move of movePossibles) {
+              let [newRow, newCol] = move;
 
-            maxScore = Math.max(maxScore, score!);
-            alpha = Math.max(alpha, score!);
+              console.log(`possibles moves: ${movePossibles}`);
+              console.log(newCol, newRow, i, j);
+              board.movePawn(i, j, newRow, newCol);
+              let score = this.minimax(
+                depth - 1,
+                alpha,
+                beta,
+                false,
+                board,
+                turn
+              );
+              board.movePawn(newRow, newCol, i, j); // Undo the move
 
-            if (beta <= alpha) {
-              break;
+              maxEval = Math.max(maxEval, score);
+              alpha = Math.max(alpha, score);
+
+              if (beta <= alpha) {
+                break;
+              }
             }
           }
         }
       }
 
-      return maxScore;
+      return maxEval;
     } else {
-      let minScore = Infinity;
+      let minEval = Infinity;
 
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
-          if (board.getBoard()[i][j] === 0) {
-            board.getBoard()[i][j] = this.player;
-            let score = this.minimax(depth + 1, alpha, beta, true, board, turn);
-            board.getBoard()[i][j] = 0;
+          if (boardState[i][j] === this.AIPlayer) {
+            let movePossibles = board.suggestMoves(i, j);
+            for (let move of movePossibles) {
+              let [newRow, newCol] = move;
 
-            minScore = Math.min(minScore, score!);
-            beta = Math.max(beta, score!);
+              console.log(`possibles moves: ${movePossibles}`);
+              console.log(newCol, newRow, i, j);
+              board.movePawn(i, j, newRow, newCol);
+              let score = this.minimax(
+                depth - 1,
+                alpha,
+                beta,
+                true,
+                board,
+                turn
+              );
+              board.movePawn(newRow, newCol, i, j); // Undo the move
 
-            if (beta <= alpha) {
-              break;
+              minEval = Math.min(minEval, score);
+              beta = Math.min(beta, score);
+
+              if (beta <= alpha) {
+                break;
+              }
             }
           }
         }
       }
 
-      return minScore;
+      return minEval;
     }
   }
 }

@@ -30,25 +30,26 @@ export class Board {
                 this.board[row][col] = 0;
                 this.gameHelper.changeTurn();
             }
-            else {
-                alert(`Erreur de tour: tour du joueur ${this.gameHelper.getCurrentPlayer()}`);
-            }
         }
     }
     checkWinner(turn) {
-        //ligne
-        for (let row = 0; row < 3; row++) {
-            if (this.board[row][0] === turn &&
-                this.board[row][1] === turn &&
-                this.board[row][2] === turn) {
-                return turn;
-            }
-        }
+        // //ligne
+        // for (let row = 0; row < 3; row++) {
+        //   if (
+        //     this.board[row][0] === turn &&
+        //     this.board[row][1] === turn &&
+        //     this.board[row][2] === turn
+        //   ) {
+        //     console.log(`Le joueur ${turn} a gagné`);
+        //     return turn as number;
+        //   }
+        // }
         //colonne
         for (let col = 0; col < 3; col++) {
             if (this.board[0][col] === turn &&
                 this.board[1][col] === turn &&
                 this.board[2][col] === turn) {
+                console.log(`Le joueur ${turn} a gagné`);
                 return turn;
             }
         }
@@ -56,12 +57,14 @@ export class Board {
         if (this.board[0][0] === turn &&
             this.board[1][1] === turn &&
             this.board[2][2] === turn) {
+            console.log(`Le joueur ${turn} a gagné`);
             return turn;
         }
         //diagonal 2
         if (this.board[2][0] === turn &&
             this.board[1][1] === turn &&
             this.board[0][2] === turn) {
+            console.log(`Le joueur ${turn} a gagné`);
             return turn;
         }
         return null;

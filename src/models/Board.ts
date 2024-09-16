@@ -44,26 +44,22 @@ export class Board {
         this.board[newRow][newCol] = this.board[row][col];
         this.board[row][col] = 0;
         this.gameHelper.changeTurn();
-      } else {
-        alert(
-          `Erreur de tour: tour du joueur ${this.gameHelper.getCurrentPlayer()}`
-        );
       }
     }
   }
 
   public checkWinner(turn: PlayerType): number | null {
-    //ligne
-    for (let row = 0; row < 3; row++) {
-      if (
-        this.board[row][0] === turn &&
-        this.board[row][1] === turn &&
-        this.board[row][2] === turn
-      ) {
-        return turn as number;
-      }
-    }
-
+    // //ligne
+    // for (let row = 0; row < 3; row++) {
+    //   if (
+    //     this.board[row][0] === turn &&
+    //     this.board[row][1] === turn &&
+    //     this.board[row][2] === turn
+    //   ) {
+    //     console.log(`Le joueur ${turn} a gagné`);
+    //     return turn as number;
+    //   }
+    // }
     //colonne
     for (let col = 0; col < 3; col++) {
       if (
@@ -71,6 +67,7 @@ export class Board {
         this.board[1][col] === turn &&
         this.board[2][col] === turn
       ) {
+        console.log(`Le joueur ${turn} a gagné`);
         return turn as number;
       }
     }
@@ -81,6 +78,7 @@ export class Board {
       this.board[1][1] === turn &&
       this.board[2][2] === turn
     ) {
+      console.log(`Le joueur ${turn} a gagné`);
       return turn as number;
     }
 
@@ -90,6 +88,7 @@ export class Board {
       this.board[1][1] === turn &&
       this.board[0][2] === turn
     ) {
+      console.log(`Le joueur ${turn} a gagné`); 
       return turn as number;
     }
 
