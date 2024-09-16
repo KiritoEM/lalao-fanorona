@@ -5,43 +5,54 @@ export class Computer {
   private AIPlayer: PlayerType = PlayerType.player2;
   private player: PlayerType = PlayerType.player1;
 
+  public getAIPawn(board: number[][]): number[] {
+    let AIPawns = [];
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] === this.AIPlayer) {
+          AIPawns.push([i, j]);
+        }
+      }
+    }
+
+    if (AIPawns.length === 0) {
+      return [];
+    }
+
+    return AIPawns[Math.floor(Math.random() * AIPawns.length)];
+  }
+
   public computerMove(board: Board, depth: number, turn: PlayerType): number[] {
     let bestScore = -Infinity;
     let bestMove = [-1, -1, -1, -1];
     let alpha: number = -Infinity;
     let beta: number = Infinity;
 
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (board.getBoard()[i][j] === this.AIPlayer) {
-          console.log(i, j);
-          let movePossibles = board.suggestMoves(i, j);
-          console.log(`suggest moves: ${movePossibles}`);
-          for (let move of movePossibles) {
-            let [newRow, newCol] = move;
-            board.movePawn(i, j, newRow, newCol);
-            let score = this.minimax(
-              depth - 1,
-              alpha,
-              beta,
-              false,
-              board,
-              turn
-            );
-            console.log("score: " + score);
+    let AIPawn = this.getAIPawn(board.getBoard());
+    if (AIPawn.length === 0) {
+      return [];
+    }
 
-            board.movePawn(newRow, newCol, i, j); // Undo the move
+    let [i, j] = AIPawn;
+    let movePossibles = board.suggestMoves(i, j);
+    console.log(`suggest moves: ${movePossibles}`);
+    for (let move of movePossibles) {
+      let [newRow, newCol] = move;
+      board.movePawn(i, j, newRow, newCol);
+      let score = this.minimax(depth - 1, alpha, beta, false, board, turn);
+      console.log("score: " + score);
+      console.log("bestScore: " + bestScore);
 
-            if (score > bestScore) {
-              bestScore = score;
-              bestMove = [i, j, newRow, newCol];
-            }
-            alpha = Math.max(alpha, score);
-            if (beta <= alpha) {
-              break;
-            }
-          }
-        }
+      board.movePawn(newRow, newCol, i, j); // Undo the move
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = [i, j, newRow, newCol];
+      }
+      alpha = Math.max(alpha, score);
+      if (beta <= alpha) {
+        break;
       }
     }
 
@@ -70,34 +81,27 @@ export class Computer {
     if (isMaximizing) {
       let maxEval = -Infinity;
 
-      for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-          if (boardState[i][j] === this.AIPlayer) {
-            let movePossibles = board.suggestMoves(i, j);
-            for (let move of movePossibles) {
-              let [newRow, newCol] = move;
+      let AIPawn = this.getAIPawn(boardState);
+      if (AIPawn.length === 0) {
+        return 0;
+      }
 
-              console.log(`possibles moves: ${movePossibles}`);
-              console.log(newCol, newRow, i, j);
-              board.movePawn(i, j, newRow, newCol);
-              let score = this.minimax(
-                depth - 1,
-                alpha,
-                beta,
-                false,
-                board,
-                turn
-              );
-              board.movePawn(newRow, newCol, i, j); // Undo the move
+      let [i, j] = AIPawn;
+      let movePossibles = board.suggestMoves(i, j);
+      for (let move of movePossibles) {
+        let [newRow, newCol] = move;
 
-              maxEval = Math.max(maxEval, score);
-              alpha = Math.max(alpha, score);
+        console.log(`possibles moves: ${movePossibles}`);
+        console.log(newCol, newRow, i, j);
+        board.movePawn(i, j, newRow, newCol);
+        let score = this.minimax(depth - 1, alpha, beta, false, board, turn);
+        board.movePawn(newRow, newCol, i, j); // Undo the move
 
-              if (beta <= alpha) {
-                break;
-              }
-            }
-          }
+        maxEval = Math.max(maxEval, score);
+        alpha = Math.max(alpha, score);
+
+        if (beta <= alpha) {
+          break;
         }
       }
 
@@ -105,34 +109,27 @@ export class Computer {
     } else {
       let minEval = Infinity;
 
-      for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-          if (boardState[i][j] === this.AIPlayer) {
-            let movePossibles = board.suggestMoves(i, j);
-            for (let move of movePossibles) {
-              let [newRow, newCol] = move;
+      let AIPawn = this.getAIPawn(boardState);
+      if (AIPawn.length === 0) {
+        return 0;
+      }
 
-              console.log(`possibles moves: ${movePossibles}`);
-              console.log(newCol, newRow, i, j);
-              board.movePawn(i, j, newRow, newCol);
-              let score = this.minimax(
-                depth - 1,
-                alpha,
-                beta,
-                true,
-                board,
-                turn
-              );
-              board.movePawn(newRow, newCol, i, j); // Undo the move
+      let [i, j] = AIPawn;
+      let movePossibles = board.suggestMoves(i, j);
+      for (let move of movePossibles) {
+        let [newRow, newCol] = move;
 
-              minEval = Math.min(minEval, score);
-              beta = Math.min(beta, score);
+        console.log(`possibles moves: ${movePossibles}`);
+        console.log(newCol, newRow, i, j);
+        board.movePawn(i, j, newRow, newCol);
+        let score = this.minimax(depth - 1, alpha, beta, true, board, turn);
+        board.movePawn(newRow, newCol, i, j); // Undo the move
 
-              if (beta <= alpha) {
-                break;
-              }
-            }
-          }
+        minEval = Math.min(minEval, score);
+        beta = Math.min(beta, score);
+
+        if (beta <= alpha) {
+          break;
         }
       }
 

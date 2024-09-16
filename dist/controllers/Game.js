@@ -126,14 +126,20 @@ export class FanoronaGame {
                 }
                 if (this.gameHelper.getCurrentPlayer() === PlayerType.player2) {
                     console.log("AI tour");
-                    const [row, col, predictRow, predictedCol] = this.computer.computerMove(this.board, 5, this.gameHelper.getCurrentPlayer());
-                    console.log("depuis game.ts: " + row, col, predictRow, predictedCol);
-                    console.log(`selectedPawn: [${this.selectedRow}][${this.selectedCol}]; predictedCoord: [${predictRow}][${predictedCol}]`);
-                    this.board.movePawn(row, col, predictRow, predictedCol);
-                    this.board.checkWinner(this.gameHelper.getCurrentPlayer());
-                    this.gameHelper.changeTurn();
-                    this.boardMatrix = this.board.getBoard();
-                    this.renderBoard();
+                    const move = this.computer.computerMove(this.board, 5, this.gameHelper.getCurrentPlayer());
+                    if (move) {
+                        const [row, col, predictRow, predictedCol] = move;
+                        console.log("depuis game.ts: " + row, col, predictRow, predictedCol);
+                        console.log(`selectedPawn: [${this.selectedRow}][${this.selectedCol}]; predictedCoord: [${predictRow}][${predictedCol}]`);
+                        this.board.movePawn(row, col, predictRow, predictedCol);
+                        this.board.checkWinner(this.gameHelper.getCurrentPlayer());
+                        this.gameHelper.changeTurn();
+                        this.boardMatrix = this.board.getBoard();
+                        this.renderBoard();
+                    }
+                    else {
+                        console.log("No valid move found for AI.");
+                    }
                 }
             }
             this.selectedRow = -1;
