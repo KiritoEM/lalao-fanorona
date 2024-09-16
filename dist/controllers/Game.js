@@ -134,7 +134,7 @@ export class FanoronaGame {
     handleAITurn() {
         if (this.gameHelper.getCurrentPlayer() === PlayerType.player2) {
             console.log("AI tour");
-            const move = this.computer.computerMove(this.board, 5, this.gameHelper.getCurrentPlayer());
+            const move = this.computer.computerMove(this.board, 6, this.gameHelper.getCurrentPlayer());
             if (move) {
                 const [row, col, predictRow, predictedCol] = move;
                 console.log("depuis game.ts: " + row, col, predictRow, predictedCol);

@@ -8,7 +8,11 @@ export class Board {
             [0, 0, 0],
             [2, 2, 2],
         ];
-        this.moveCount = 0;
+        this.movedPawns = [
+            [false, false, false],
+            [false, false, false],
+            [false, false, false],
+        ];
         this.boardHelper = new BoardHelper();
         this.gameHelper = new GameHelper();
         this.computer = new Computer();
@@ -22,7 +26,11 @@ export class Board {
             [0, 0, 0],
             [2, 2, 2],
         ];
-        this.moveCount = 0;
+        this.movedPawns = [
+            [false, false, false],
+            [false, false, false],
+            [false, false, false],
+        ];
     }
     movePawn(row, col, newRow, newCol) {
         if (this.boardHelper.canMove(row, col, newCol, newRow) &&
@@ -30,13 +38,13 @@ export class Board {
             if (this.board[row][col] === this.gameHelper.getCurrentPlayer()) {
                 this.board[newRow][newCol] = this.board[row][col];
                 this.board[row][col] = 0;
-                this.moveCount++;
+                this.movedPawns[row][col] = true;
                 this.gameHelper.changeTurn();
             }
         }
     }
     checkWinner(turn) {
-        if (this.moveCount >= 6) {
+        if (this.haveAllPawnsMoved(turn)) {
             //ligne
             for (let row = 0; row < 3; row++) {
                 if (this.board[row][0] === turn &&
@@ -79,6 +87,16 @@ export class Board {
             }
         }
         return null;
+    }
+    haveAllPawnsMoved(turn) {
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                if (this.board[row][col] === turn && !this.movedPawns[row][col]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     suggestMoves(row, col) {
         let moves = [];

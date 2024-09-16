@@ -9,7 +9,11 @@ export class Board {
     [0, 0, 0],
     [2, 2, 2],
   ];
-  private moveCount: number = 0;
+  private movedPawns: boolean[][] = [
+    [false, false, false],
+    [false, false, false],
+    [false, false, false],
+  ];
 
   boardHelper = new BoardHelper();
   gameHelper = new GameHelper();
@@ -27,7 +31,11 @@ export class Board {
       [0, 0, 0],
       [2, 2, 2],
     ];
-    this.moveCount = 0;
+    this.movedPawns = [
+      [false, false, false],
+      [false, false, false],
+      [false, false, false],
+    ];
   }
 
   public movePawn(
@@ -45,14 +53,14 @@ export class Board {
       ) {
         this.board[newRow][newCol] = this.board[row][col];
         this.board[row][col] = 0;
-        this.moveCount++;
+        this.movedPawns[row][col] = true;
         this.gameHelper.changeTurn();
       }
     }
   }
 
   public checkWinner(turn: PlayerType): number | null {
-    if (this.moveCount >= 6) {
+    if (this.haveAllPawnsMoved(turn)) {
       //ligne
       for (let row = 0; row < 3; row++) {
         if (
@@ -107,6 +115,17 @@ export class Board {
     }
 
     return null;
+  }
+
+  private haveAllPawnsMoved(turn: PlayerType): boolean {
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
+        if (this.board[row][col] === turn && !this.movedPawns[row][col]) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   public suggestMoves(row: number, col: number): number[][] {
