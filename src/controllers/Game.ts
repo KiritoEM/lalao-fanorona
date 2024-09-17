@@ -173,8 +173,6 @@ export class FanoronaGame {
         this.gameHelper.changeTurn();
         this.boardMatrix = this.board.getBoard();
         this.renderBoard();
-      } else {
-        console.log("No valid move found for AI.");
       }
     }
   }
