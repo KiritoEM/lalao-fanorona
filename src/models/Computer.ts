@@ -56,8 +56,6 @@ export class Computer {
 
       if (score > bestScore) {
         bestScore = score;
-        console.log("score: " + score);
-        console.log("bestScore: " + bestScore);
         bestMove = [pawn[0], pawn[1], newRow, newCol];
       }
       alpha = Math.max(alpha, score);
@@ -67,7 +65,6 @@ export class Computer {
     }
 
     if (bestMove[0] !== -1 && bestMove[1] !== -1) {
-      console.log(bestMove);
       return bestMove;
     }
 
@@ -93,12 +90,10 @@ export class Computer {
 
     if (isMaximizing) {
       let maxEval = -Infinity;
-      console.log("-------maximising---------")
 
       movePossibles.forEach((move: any) => {
         let [newRow, newCol] = move;
         board.setBoard(newRow, newCol, this.AIPlayer);
-        console.log(`i= ${newRow} j= ${newCol}: ${boardState[newRow][newCol]}`)
 
         let score: number = this.minimax(
           depth - 1,
@@ -112,7 +107,6 @@ export class Computer {
         );
 
         board.setBoard(newRow, newCol, 0); // Annuler le mouvement
-        console.log(`Score for move (${newRow}, ${newCol}): ${score}`);
 
         maxEval = Math.max(maxEval, score);
         alpha = Math.max(alpha, score);
@@ -125,12 +119,10 @@ export class Computer {
       return maxEval;
     } else {
       let minEval = Infinity;
-      console.log("-------minimising---------")
 
       movePossibles.forEach((move: any) => {
         let [newRow, newCol] = move;
         board.setBoard(newRow, newCol, this.player);
-        console.log(`i= ${newRow} j= ${newCol}: ${boardState[newRow][newCol]}`)
 
         let score: number = this.minimax(
           depth - 1,
@@ -144,7 +136,6 @@ export class Computer {
         );
 
         board.setBoard(newRow, newCol, 0); // Annuler le mouvement
-        console.log(`Score for move (${newRow}, ${newCol}): ${score}`);
 
         minEval = Math.min(minEval, score);
         beta = Math.min(beta, score);
